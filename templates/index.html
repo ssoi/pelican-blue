@@ -15,28 +15,12 @@
 {% block content %}
     <h1 class="title">Hi, I'm {{ AUTHOR }}</h1>
     {% if articles %}
-        <ol class="posts">
-            {% block heading %}<h2 class="latest">Latest Posts</h2>{% endblock %}
-            {% for article in (articles_page.object_list if articles_page else articles) %}
-                <li class="post_list"><p class="post_entry">
-                    <h2 class="post_title"><a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
-                                              title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a>
-                    </h2>
-                    {% if DISPLAY_SUMMARY and article.summary|length > 0 %}
-                        <p>{{ article.summary }}</p>
-                    {% endif %}
-                    <a href="{{ SITEURL }}/{{ article.author.url }}">@{{ article.author }}</a>
-                    <span> in </span>
-                    <span class="post_category"><a href="{{ SITEURL }}/{{ article.category.url }}" rel="bookmark"
-                                                   title="Permalink to {{ article.category|striptags }}">[ {{ article.category }} ]</a></span>
-                    <span class="post_date">{{ article.locale_date }}</span>
-                </li>
-            {% endfor %}
-        </ol>
+        {% for article in (articles_page.object_list if articles_page else articles) %}
+            {% if article.is_home %}
+                <div class="entry-content blog-post">
+                    {{ article.content }}
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
-
-    {% if articles_page and articles_paginator.num_pages > 1 %}
-        {% include 'pagination.html' %}
-    {% endif %}
-
 {% endblock content %}
